@@ -39,7 +39,7 @@ git clone <YOUR_GITHUB_REPO_URL>
 cd "fleuria handmade"
 
 # 2. Start the local server
-node server.js
+node local-server.js
 
 # 3. Open in your browser
 http://localhost:3000/
@@ -54,7 +54,9 @@ Or open `index.html` directly in any modern web browser!
 ```
 fleuria-handmade/
 ├── index.html              # Main HTML5 semantic structure & storefront
-├── server.js               # Lightweight local static preview server
+├── local-server.js         # Lightweight local static preview server
+├── vercel.json             # Vercel deployment configuration
+├── .vercelignore           # Ignored files for Vercel
 ├── .gitignore              # Ignored files
 ├── README.md               # Documentation & setup guide
 └── assets/
