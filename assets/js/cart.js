@@ -11,7 +11,22 @@ class CartManager {
   loadCart() {
     try {
       const saved = localStorage.getItem(this.storageKey);
-      return saved ? JSON.parse(saved) : [];
+      if (!saved) return [];
+      const items = JSON.parse(saved);
+      // Migrate legacy cart items with old USD prices (< 500) to current Algerian Dinar prices
+      let modified = false;
+      const updatedItems = items.map(item => {
+        const prod = typeof getProductById === "function" ? getProductById(item.productId) : null;
+        if (prod && item.price < 500 && prod.price >= 500) {
+          item.price = prod.price;
+          modified = true;
+        }
+        return item;
+      });
+      if (modified) {
+        localStorage.setItem(this.storageKey, JSON.stringify(updatedItems));
+      }
+      return updatedItems;
     } catch (e) {
       console.warn("Could not read cart from localStorage", e);
       return [];

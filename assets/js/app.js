@@ -689,9 +689,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const updated = {
         whatsappNumber: document.getElementById("cfgWhatsapp").value.trim(),
         whatsappDisplay: document.getElementById("cfgDisplay").value.trim(),
-        currency: document.getElementById("cfgCurrency").value.trim() || "$",
-        freeShippingThreshold: Number(document.getElementById("cfgFreeShip").value) || 60,
-        standardShippingFee: Number(document.getElementById("cfgShipFee").value) || 5
+        currency: document.getElementById("cfgCurrency").value.trim() || "DA",
+        freeShippingThreshold: Number(document.getElementById("cfgFreeShip").value) || 8000,
+        standardShippingFee: Number(document.getElementById("cfgShipFee").value) || 600
       };
 
       updateStoreConfig(updated);

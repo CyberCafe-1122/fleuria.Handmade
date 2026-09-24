@@ -1,6 +1,6 @@
 # 🌸 Fleuria Handmade - Luxury Artisan E-Commerce & WhatsApp Business Storefront
 
-> An elegant, professional e-commerce storefront for handcrafted crochet floral bouquets, artisanal soy candles, preserved roses, and bespoke gifts with a direct **WhatsApp Selling & Order Dispatch Engine**.
+> An elegant, professional e-commerce storefront for handcrafted pipe cleaner flower bouquets, artisanal soy candles, preserved roses, and bespoke gifts with a direct **WhatsApp Selling & Order Dispatch Engine**.
 
 ---
 
@@ -20,12 +20,12 @@
   - Micro-interactions, animated cart badge, glassmorphism sticky header, and toast notification alerts.
 
 - **🛍️ Complete Product Catalog**:
-  - Category filtering (*Crochet Bouquets*, *Botanical Candles*, *Preserved Flowers*, *Floral Jewelry*, *Gift Hampers*).
+  - Category filtering (*Pipe Cleaner Flowers*, *Botanical Candles*, *Preserved Flowers*, *Floral Jewelry*, *Gift Hampers*).
   - Instant live keyword search.
   - Quick Preview Modal with product features, care guides, and variant option selectors.
 
 - **⚙️ Live Store Configuration (No Coding Needed)**:
-  - Store owners can click **"Store Settings"** in the footer to update their WhatsApp phone number, display number, currency symbol (`$`, `₨`, `£`, `€`, `AED`), and shipping fees at any time with immediate `localStorage` persistence.
+  - Store owners can click **"Store Settings"** in the footer to update their WhatsApp phone number, display number, currency symbol (`DA`, `DZD`, `$`, `€`), and shipping fees at any time with immediate `localStorage` persistence.
 
 ---
 
@@ -69,13 +69,13 @@ fleuria-handmade/
     │   └── app.js          # Interactive catalog, search, modals & UI events
     └── images/             # High-resolution handcrafted product photography
         ├── hero-banner.jpg
-        ├── crochet-tulips.jpg
+        ├── pipe-cleaner-tulips.jpg
         ├── botanical-candle.jpg
         ├── preserved-roses.jpg
         ├── resin-necklace.jpg
         ├── botanical-sachet.jpg
         ├── gift-hamper.jpg
-        ├── crochet-sunflower.jpg
+        ├── pipe-cleaner-sunflower.jpg
         └── artisan-maker.jpg
 ```
 
@@ -98,18 +98,18 @@ When a customer checks out through the cart drawer, Fleuria generates a structur
 "Happy Anniversary, my love! Forever blooming."
 
 🛍️ *ORDERED ITEMS (2 items)*
-1. *Pastel Bloom Crochet Tulip Bouquet*
-   • Qty: 1 × $48.00 = $48.00
+1. *Pastel Bloom Pipe Cleaner Tulip Bouquet*
+   • Qty: 1 × 4 800 DA = 4 800 DA
    • Customization: ribbon color: Dusty Rose
 
 2. *Botanical Blossom Hand-Poured Soy Candle*
-   • Qty: 1 × $28.00 = $28.00
+   • Qty: 1 × 2 800 DA = 2 800 DA
    • Customization: scent: Rose & Velvet Peony
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📦 *Subtotal:* $76.00
-🚚 *Delivery:* FREE (Qualified for free shipping)
-✨ *ESTIMATED TOTAL:* $76.00
+📦 *Subtotal:* 7 600 DA
+🚚 *Delivery:* 600 DA
+✨ *ESTIMATED TOTAL:* 8 200 DA
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 💬 *Next Steps:* Please confirm order availability and send payment details.
 ```

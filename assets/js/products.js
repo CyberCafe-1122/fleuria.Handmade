@@ -4,26 +4,26 @@
 const PRODUCTS = [
   {
     id: "fh-001",
-    title: "Pastel Bloom Crochet Tulip Bouquet",
-    slug: "pastel-bloom-crochet-tulip-bouquet",
-    category: "crochet",
-    categoryName: "Crochet Bouquets",
-    price: 48.00,
-    originalPrice: 58.00,
+    title: "Pastel Bloom Pipe Cleaner Tulip Bouquet",
+    slug: "pastel-bloom-pipe-cleaner-tulip-bouquet",
+    category: "pipe-cleaner",
+    categoryName: "Pipe Cleaner Flowers",
+    price: 4800,
+    originalPrice: 5800,
     rating: 4.9,
     reviewCount: 42,
     badge: "Bestseller",
     badgeType: "bestseller",
-    image: "assets/images/crochet-tulips.jpg",
-    shortDescription: "A forever-blooming bouquet of 7 hand-crocheted pastel pink tulips and cheerful daisies, wrapped in textured kraft paper with silk ribbon.",
-    description: "Carefully hand-stitched by our master artisans using 100% premium milk cotton yarn. Unlike fresh florals, these whimsical crochet blooms will remain fresh, soft, and vibrant forever without watering or wilting.",
+    image: "assets/images/pipe-cleaner-tulips.jpg",
+    shortDescription: "A forever-blooming bouquet of hand-sculpted pastel pink tulips and cheerful mini daisies, crafted from velvety chenille stems and wrapped in Korean aesthetic floral paper with silk ribbon.",
+    description: "Meticulously handcrafted petal by petal using premium ultra-dense plush chenille stems (pipe cleaners). Unlike fresh florals, these velvety blooms will remain fresh, tactile, and vibrant forever without watering or wilting, with bendable stems for custom arrangements.",
     features: [
-      "100% Hand-knitted with soft organic milk cotton yarn",
-      "Includes 5 pastel tulips, 3 mini daisies, and textured foliage",
-      "Arrives pre-wrapped with premium kraft paper and blush satin bow",
-      "Hypoallergenic, dust-resistant, and everlasting"
+      "100% Handcrafted with ultra-soft plush chenille stems (pipe cleaners)",
+      "Includes 5 pastel tulips, 3 mini daisies, and textured bendable foliage",
+      "Arrives pre-wrapped with aesthetic floral paper and blush satin bow",
+      "Everlasting, flexible stems, dust-resistant, and hypoallergenic"
     ],
-    care: "Gently dust occasionally with a soft brush or hair dryer on cool low setting. Keep away from prolonged intense direct moisture.",
+    care: "Gently shape or fluff petals if desired. Dust occasionally with a soft makeup brush or gentle cool air blower. Keep away from water.",
     options: {
       ribbonColor: ["Dusty Rose", "Sage Olive", "Champagne Gold", "Soft Cream"],
       scentSpritz: ["Light Lavender Mist", "English Rose Petals", "Unscented Natural"]
@@ -35,7 +35,7 @@ const PRODUCTS = [
     slug: "botanical-blossom-soy-candle",
     category: "candles",
     categoryName: "Botanical Candles",
-    price: 28.00,
+    price: 2800,
     originalPrice: null,
     rating: 5.0,
     reviewCount: 38,
@@ -53,7 +53,7 @@ const PRODUCTS = [
     care: "Trim wooden wick to 1/4 inch before each lighting. Burn for at least 2 hours on first burn to establish an even wax pool.",
     options: {
       scent: ["Rose & Velvet Peony", "French Lavender & Bergamot", "Warm Honey & Amber Vanilla"],
-      packaging: ["Standard Gift Box", "Luxury Gift Box with Dried Posy (+$4)"]
+      packaging: ["Standard Gift Box", "Luxury Gift Box with Dried Posy (+500 DA)"]
     }
   },
   {
@@ -62,8 +62,8 @@ const PRODUCTS = [
     slug: "eternal-rose-glass-cloche",
     category: "preserved",
     categoryName: "Preserved Flowers",
-    price: 68.00,
-    originalPrice: 79.00,
+    price: 6800,
+    originalPrice: 7900,
     rating: 4.9,
     reviewCount: 29,
     badge: "Limited Edition",
@@ -80,7 +80,7 @@ const PRODUCTS = [
     care: "Keep in a climate-controlled room away from high humidity and harsh direct sun. Do not remove glass cloche frequently.",
     options: {
       roseShade: ["Blush Peach & Ivory", "Romantic Crimson Red", "Dusty Lavender & White"],
-      engravedPlate: ["No Engraving", "Custom Gold Engraved Nameplate (+$6)"]
+      engravedPlate: ["No Engraving", "Custom Gold Engraved Nameplate (+800 DA)"]
     }
   },
   {
@@ -89,7 +89,7 @@ const PRODUCTS = [
     slug: "forget-me-not-resin-pendant",
     category: "jewelry",
     categoryName: "Floral Jewelry",
-    price: 36.00,
+    price: 3600,
     originalPrice: null,
     rating: 4.8,
     reviewCount: 51,
@@ -116,8 +116,8 @@ const PRODUCTS = [
     slug: "botanical-floral-wax-sachets-duo",
     category: "candles",
     categoryName: "Botanical Candles",
-    price: 24.00,
-    originalPrice: 28.00,
+    price: 2400,
+    originalPrice: 2800,
     rating: 5.0,
     reviewCount: 31,
     badge: "New Arrival",
@@ -142,18 +142,18 @@ const PRODUCTS = [
     slug: "grand-artisan-botanical-gift-hamper",
     category: "hampers",
     categoryName: "Gift Hampers",
-    price: 89.00,
-    originalPrice: 105.00,
+    price: 8900,
+    originalPrice: 10500,
     rating: 5.0,
     reviewCount: 64,
     badge: "Bestseller",
     badgeType: "bestseller",
     image: "assets/images/gift-hamper.jpg",
-    shortDescription: "Our signature luxury pine gift chest filled with a mini crochet rose posy, botanical candle, wax tablets, and a personalized calligraphy card.",
+    shortDescription: "Our signature luxury pine gift chest filled with a mini pipe cleaner rose posy, botanical candle, wax tablets, and a personalized calligraphy card.",
     description: "The ultimate unboxing gift experience! Encased in a handcrafted natural pine wooden chest, tied with double-faced satin ribbon, and cushioned in fragrant dried floral potpourri petals.",
     features: [
       "Custom pine wood presentation box with slide lid",
-      "1x Hand-crocheted 5-bloom rose keepsake posy",
+      "1x Handcrafted 5-bloom velvety pipe cleaner rose posy",
       "1x Full-sized Botanical Blossom Soy Candle (8 oz)",
       "2x Scented Botanical Wardrobe Wax Tablets",
       "Handwritten personalized calligraphy greeting card"
@@ -166,28 +166,28 @@ const PRODUCTS = [
   },
   {
     id: "fh-007",
-    title: "Sun-Kissed Crochet Sunflower Ceramic Pot",
-    slug: "sun-kissed-crochet-sunflower-pot",
-    category: "crochet",
-    categoryName: "Crochet Bouquets",
-    price: 32.00,
+    title: "Sun-Kissed Pipe Cleaner Sunflower Ceramic Pot",
+    slug: "sun-kissed-pipe-cleaner-sunflower-pot",
+    category: "pipe-cleaner",
+    categoryName: "Pipe Cleaner Flowers",
+    price: 3200,
     originalPrice: null,
     rating: 4.9,
     reviewCount: 22,
     badge: "Customer Favorite",
     badgeType: "artisan",
-    image: "assets/images/crochet-sunflower.jpg",
-    shortDescription: "A cheerful handmade crochet sunflower potted in an authentic miniature terracotta clay pot with textured soil knit.",
-    description: "Brighten any desk, study table, or window sill with sunny everlasting optimism. Every petal is individually crocheted and wired for flexible arrangement.",
+    image: "assets/images/pipe-cleaner-sunflower.jpg",
+    shortDescription: "A cheerful handmade velvety pipe cleaner sunflower potted in an authentic miniature terracotta clay pot with textured moss base.",
+    description: "Brighten any desk, study table, or window sill with sunny everlasting optimism. Every petal is individually hand-shaped and twisted from rich golden and chocolate chenille craft stems with flexible wired structure.",
     features: [
-      "Handcrafted with vibrant mustard and chocolate yarn",
-      "Real rustic terracotta miniature ceramic pot",
+      "Handcrafted with vibrant mustard and chocolate plush chenille stems",
+      "Real rustic terracotta miniature ceramic pot with faux moss base",
       "Flexible wired stem allows you to angle the flower towards light",
-      "Zero watering required - never withers"
+      "Zero watering required — never withers"
     ],
-    care: "No water needed! Occasionally wipe pot with dry cloth.",
+    care: "No water needed! Occasionally wipe pot with dry cloth and gently dust petals with a soft brush.",
     options: {
-      potStyle: ["Classic Terracotta", "Modern Matte White Ceramic (+$3)"]
+      potStyle: ["Classic Terracotta", "Modern Matte White Ceramic (+400 DA)"]
     }
   }
 ];

@@ -4,14 +4,14 @@
  */
 const DEFAULT_CONFIG = {
   storeName: "Fleuria Handmade",
-  tagline: "Artisan Crochet Florals, Botanical Candles & Handcrafted Gifts",
+  tagline: "Artisan Pipe Cleaner Florals, Botanical Candles & Handcrafted Gifts",
   // WhatsApp business number in international format without '+' or spaces
   whatsappNumber: "213555812564",
   whatsappDisplay: "+213 555 81 25 64",
-  currency: "$",
-  currencyCode: "USD",
-  freeShippingThreshold: 60,
-  standardShippingFee: 5,
+  currency: "DA",
+  currencyCode: "DZD",
+  freeShippingThreshold: 8000,
+  standardShippingFee: 600,
   instagram: "@fleuria.handmade",
   email: "orders@fleuriahandmade.com",
   location: "Artisan Botanical Studio, Suite 4B",
@@ -28,9 +28,25 @@ const StoreConfig = {
       const saved = localStorage.getItem("fleuria_store_config");
       if (!saved) return {};
       const parsed = JSON.parse(saved);
+      let migrated = false;
       if (parsed.whatsappNumber === "15551234567") {
         parsed.whatsappNumber = "213555812564";
         parsed.whatsappDisplay = "+213 555 81 25 64";
+        migrated = true;
+      }
+      // Migrate old USD default config to Algerian Dinar (DA / DZD)
+      if (parsed.currency === "$" || parsed.currencyCode === "USD") {
+        parsed.currency = "DA";
+        parsed.currencyCode = "DZD";
+        if (parsed.freeShippingThreshold === 60) parsed.freeShippingThreshold = 8000;
+        if (parsed.standardShippingFee === 5) parsed.standardShippingFee = 600;
+        migrated = true;
+      }
+      if (parsed.tagline && parsed.tagline.includes("Crochet")) {
+        parsed.tagline = DEFAULT_CONFIG.tagline;
+        migrated = true;
+      }
+      if (migrated) {
         localStorage.setItem("fleuria_store_config", JSON.stringify(parsed));
       }
       return parsed;
@@ -62,7 +78,29 @@ function resetStoreConfig() {
 // Helper to format currency
 function formatCurrency(amount) {
   const val = Number(amount) || 0;
-  return `${StoreConfig.currency}${val.toFixed(2)}`;
+  const curr = (StoreConfig.currency || "DA").trim();
+  const isDZD = curr === "DA" || curr === "DZD" || StoreConfig.currencyCode === "DZD" || curr === "د.ج";
+
+  if (isDZD) {
+    // Standard Algerian Dinar pricing: whole numbers with thousands space separator (e.g. 4 800 DA)
+    const formatted = Math.round(val)
+      .toLocaleString("fr-DZ", { maximumFractionDigits: 0 })
+      .replace(/\u202F/g, " ");
+    return `${formatted} ${curr}`;
+  }
+
+  // Prefix currencies (e.g. $, £, €, ¥)
+  if (["$", "£", "€", "¥"].includes(curr)) {
+    return `${curr}${val.toFixed(2)}`;
+  }
+
+  // Suffix text-based currencies (e.g. AED, MAD, SAR)
+  if (/^[A-Za-z]+$/.test(curr)) {
+    const formatted = val.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    return `${formatted} ${curr}`;
+  }
+
+  return `${curr} ${val.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
 }
 
 // Helper to build WhatsApp URL with encoded message
