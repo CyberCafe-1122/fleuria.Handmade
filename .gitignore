@@ -13,3 +13,4 @@ yarn-debug.log*
 # Environment / local
 .env
 .env.local
+.vercel/
