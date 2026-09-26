@@ -1,0 +1,34 @@
+{
+  "name": "fleuria-handmade",
+  "version": "1.0.0",
+  "description": "> An elegant, professional e-commerce storefront for handcrafted pipe cleaner flower bouquets, artisanal soy candles, preserved roses, and bespoke gifts with a direct **WhatsApp Selling & Order Dispatch Engine**.",
+  "main": "local-server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "server": "node server/server.js",
+    "build:admin": "npm --prefix admin run build",
+    "dev:admin": "npm --prefix admin run dev",
+    "build": "npm --prefix admin run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CyberCafe-1122/Fleuria-handmade1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/CyberCafe-1122/Fleuria-handmade1/issues"
+  },
+  "homepage": "https://github.com/CyberCafe-1122/Fleuria-handmade1#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.4",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.4.0",
+    "mysql2": "^3.24.4"
+  }
+}

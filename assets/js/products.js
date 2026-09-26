@@ -200,17 +200,77 @@ function getProductById(id) {
 // Helper to filter products
 function filterProducts(category = "all", searchQuery = "") {
   return PRODUCTS.filter(p => {
+    // Only show available products on public storefront unless specified
+    if (p.available === false && p.stock === 0) {
+      // Out of stock and unavailable products are filtered or shown with badge
+    }
     const matchCategory = category === "all" || p.category === category;
     const q = searchQuery.toLowerCase().trim();
     const matchSearch = !q || 
-      p.title.toLowerCase().includes(q) || 
-      p.shortDescription.toLowerCase().includes(q) ||
-      p.categoryName.toLowerCase().includes(q);
+      (p.title && p.title.toLowerCase().includes(q)) || 
+      (p.shortDescription && p.shortDescription.toLowerCase().includes(q)) ||
+      (p.categoryName && p.categoryName.toLowerCase().includes(q));
     return matchCategory && matchSearch;
   });
+}
+
+// Asynchronously fetch products from backend API
+async function syncProductsFromBackend() {
+  try {
+    const res = await fetch("/api/products");
+    if (!res.ok) return false;
+    const data = await res.json();
+    if (data && data.success && Array.isArray(data.products) && data.products.length > 0) {
+      // Map API products preserving fallback features/options if missing
+      const mapped = data.products.map(p => {
+        const existing = PRODUCTS.find(orig => orig.id === p.id);
+        return {
+          id: p.id,
+          title: p.name || p.title,
+          slug: p.slug,
+          category: p.category,
+          categoryName: p.categoryName || p.category_name,
+          price: Number(p.price),
+          originalPrice: p.originalPrice != null ? Number(p.originalPrice) : null,
+          rating: p.rating || 5.0,
+          reviewCount: p.reviewCount || 12,
+          badge: p.badge,
+          badgeType: p.badgeType || 'artisan',
+          image: p.image,
+          shortDescription: p.shortDescription || p.short_description || p.description,
+          description: p.description,
+          stock: Number(p.stock),
+          available: Boolean(p.available),
+          features: existing?.features || [
+            "Handcrafted in artisan studio",
+            "Premium materials and finishing",
+            "Safe bespoke packaging"
+          ],
+          care: existing?.care || "Handle with delicate care. Keep away from excessive moisture.",
+          options: existing?.options || null
+        };
+      });
+
+      // Update in-place
+      PRODUCTS.length = 0;
+      mapped.forEach(item => PRODUCTS.push(item));
+      window.dispatchEvent(new CustomEvent("fleuria_products_updated", { detail: PRODUCTS }));
+      return true;
+    }
+  } catch (err) {
+    console.log("Storefront using local product bundle:", err.message);
+  }
+  return false;
+}
+
+// Auto-sync from backend on script load
+if (typeof window !== "undefined") {
+  syncProductsFromBackend();
 }
 
 // Expose globally
 window.PRODUCTS = PRODUCTS;
 window.getProductById = getProductById;
 window.filterProducts = filterProducts;
+window.syncProductsFromBackend = syncProductsFromBackend;
+

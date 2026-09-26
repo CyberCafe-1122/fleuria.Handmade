@@ -25,7 +25,14 @@
   - Quick Preview Modal with product features, care guides, and variant option selectors.
 
 - **⚙️ Live Store Configuration (No Coding Needed)**:
-  - Store owners can click **"Store Settings"** in the footer to update their WhatsApp phone number, display number, currency symbol (`DA`, `DZD`, `$`, `€`), and shipping fees at any time with immediate `localStorage` persistence.
+  - Store owners can click **"Store Settings"** in the footer to update their WhatsApp phone number, display number, currency symbol, and shipping fees at any time with immediate `localStorage` persistence.
+
+- **🔐 Admin Management Portal (`/admin`)**:
+  - **Secure Authentication**: Protected routes with JWT tokens. Default credentials: `Iness@fleuria.com` / `Iness2131` (auto-seeded and customizable in `.env`).
+  - **Live Inventory Dashboard**: Real-time metrics on total items, active catalog products, out-of-stock warnings, and physical unit counts.
+  - **Full Product Management**: Add products with image uploading, edit details, change prices, descriptions, categories, stock levels, and instant availability toggles.
+  - **Scrollable Product Form**: Responsive Add Product view and modal with full scroll support.
+  - **Live Storefront Integration**: Direct connection with the live production site `https://fleuria-handmade-lac.vercel.app/`.
 
 ---
 

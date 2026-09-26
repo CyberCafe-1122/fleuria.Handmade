@@ -95,6 +95,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Listen for config changes
   window.addEventListener("storeConfigChanged", applyStoreBranding);
 
+  // Listen for live backend product updates
+  window.addEventListener("fleuria_products_updated", () => {
+    renderProducts();
+    updateCartUI();
+  });
+
   // =========================================================================
   // PRODUCT CATALOG RENDERING
   // =========================================================================

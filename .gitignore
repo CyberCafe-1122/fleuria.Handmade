@@ -14,3 +14,7 @@ yarn-debug.log*
 .env
 .env.local
 .vercel/
+
+# Admin and uploads
+admin/node_modules/
+uploads/
