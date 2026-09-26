@@ -8,8 +8,8 @@ const DEFAULT_CONFIG = {
   // WhatsApp business number in international format without '+' or spaces
   whatsappNumber: "213555812564",
   whatsappDisplay: "+213 555 81 25 64",
-  currency: "Rs.",
-  currencyCode: "PKR",
+  currency: "DA",
+  currencyCode: "DZD",
   freeShippingThreshold: 8000,
   standardShippingFee: 600,
   instagram: "@fleuria.handmade",
@@ -78,14 +78,7 @@ function resetStoreConfig() {
 // Helper to format currency
 function formatCurrency(amount) {
   const val = Number(amount) || 0;
-  const curr = (StoreConfig.currency || "Rs.").trim();
-
-  // Rs. currency formatting (e.g. Rs. 7,500)
-  if (curr.toLowerCase().startsWith("rs") || curr === "PKR" || curr === "INR") {
-    const formatted = Math.round(val).toLocaleString("en-US");
-    return `Rs. ${formatted}`;
-  }
-
+  const curr = (StoreConfig.currency || "DA").trim();
   const isDZD = curr === "DA" || curr === "DZD" || StoreConfig.currencyCode === "DZD" || curr === "د.ج";
 
   if (isDZD) {
