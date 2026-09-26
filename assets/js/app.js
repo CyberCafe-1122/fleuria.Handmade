@@ -29,6 +29,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleCheckoutFields = document.getElementById("toggleCheckoutFields");
   const checkoutFieldsContainer = document.getElementById("checkoutFieldsContainer");
 
+  function formatProductImageUrl(path) {
+    if (!path) return 'assets/images/pipe-cleaner-tulips.jpg';
+    const trimmed = String(path).trim();
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:') || trimmed.startsWith('blob:')) {
+      return trimmed;
+    }
+    if (trimmed.startsWith('/uploads') || trimmed.startsWith('uploads/')) {
+      const cleanPath = trimmed.startsWith('/') ? trimmed : '/' + trimmed;
+      const host = window.FLEURIA_API_HOST || '';
+      return host + cleanPath;
+    }
+    if (trimmed.startsWith('/assets/')) {
+      return trimmed.substring(1);
+    }
+    return trimmed;
+  }
+
   // Modal Elements
   const quickViewModal = document.getElementById("quickViewModal");
   const btnCloseModal = document.getElementById("btnCloseModal");
@@ -133,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <article class="product-card" data-product-id="${product.id}">
           <div class="product-media">
             <span class="product-badge badge-${product.badgeType}">${product.badge}</span>
-            <img src="${product.image}" alt="${product.title}" loading="lazy" />
+            <img src="${formatProductImageUrl(product.image)}" alt="${product.title}" loading="lazy" onerror="this.src='assets/images/pipe-cleaner-tulips.jpg'" />
             <button class="btn-quickview-overlay" data-action="quickview" data-id="${product.id}">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
               Quick Preview
@@ -219,15 +236,122 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Filter Pills Click
-  filterPills.forEach(pill => {
-    pill.addEventListener("click", (e) => {
-      filterPills.forEach(p => p.classList.remove("active"));
-      e.currentTarget.classList.add("active");
-      currentCategory = e.currentTarget.dataset.category || "all";
-      renderProducts();
+  // =========================================================================
+  // DYNAMIC CATEGORY PILLS RENDERING (Loaded from Admin Database)
+  // =========================================================================
+  function renderCategories() {
+    const pillsContainer = document.querySelector(".category-pills");
+    if (!pillsContainer) return;
+    const cats = window.CATEGORIES || [];
+
+    pillsContainer.innerHTML = `
+      <button class="filter-pill ${currentCategory === 'all' ? 'active' : ''}" data-category="all" role="tab">All Creations</button>
+      ${cats.map(c => `
+        <button class="filter-pill ${currentCategory === c.id || currentCategory === c.slug ? 'active' : ''}" data-category="${c.slug || c.id}" role="tab">
+          ${c.name}
+        </button>
+      `).join('')}
+    `;
+
+    pillsContainer.querySelectorAll(".filter-pill").forEach(pill => {
+      pill.addEventListener("click", (e) => {
+        pillsContainer.querySelectorAll(".filter-pill").forEach(p => p.classList.remove("active"));
+        e.currentTarget.classList.add("active");
+        currentCategory = e.currentTarget.dataset.category || "all";
+        renderProducts();
+      });
     });
-  });
+  }
+
+  // =========================================================================
+  // DYNAMIC APPROVED REVIEWS RENDERING (Loaded from Admin Database)
+  // =========================================================================
+  async function renderReviews() {
+    const reviewsGrid = document.querySelector(".reviews-grid");
+    if (!reviewsGrid) return;
+    const host = window.FLEURIA_API_HOST || '';
+    try {
+      const res = await fetch(`${host}/api/public/reviews`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (Array.isArray(data.reviews) && data.reviews.length > 0) {
+        reviewsGrid.innerHTML = data.reviews.map(r => `
+          <div class="review-card">
+            <div class="review-stars">${'★'.repeat(r.rating || 5)}</div>
+            <p class="review-text">"${r.text}"</p>
+            <div class="review-author">
+              <div class="author-avatar">${r.avatar || r.name.substring(0, 2).toUpperCase()}</div>
+              <div class="author-info">
+                <h5>${r.name}</h5>
+                ${r.verified ? `
+                  <span class="author-tag">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    Verified WhatsApp Buyer
+                  </span>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+    } catch (e) {}
+  }
+
+  // =========================================================================
+  // DYNAMIC WEBSITE CMS CONTENT RENDERING (Loaded from Admin Database)
+  // =========================================================================
+  async function renderCMSContent() {
+    const host = window.FLEURIA_API_HOST || '';
+    try {
+      const res = await fetch(`${host}/api/public/content`);
+      if (!res.ok) return;
+      const { content } = await res.json();
+      if (!content) return;
+
+      if (content.hero) {
+        const h = content.hero;
+        const badge = document.querySelector(".hero-badge");
+        if (badge && h.badge) badge.innerHTML = h.badge;
+        const title = document.querySelector(".hero-title");
+        if (title && h.title) title.innerHTML = h.title;
+        const sub = document.querySelector(".hero-subtitle");
+        if (sub && h.subtitle) sub.textContent = h.subtitle;
+        const heroImg = document.querySelector(".hero-card-frame img");
+        if (heroImg && h.image) heroImg.src = formatProductImageUrl(h.image);
+        const floatTitle = document.querySelector(".glass-card-info h4");
+        if (floatTitle && h.floatingCardTitle) floatTitle.textContent = h.floatingCardTitle;
+        const floatSub = document.querySelector(".glass-card-info p");
+        if (floatSub && h.floatingCardSubtitle) floatSub.textContent = h.floatingCardSubtitle;
+      }
+
+      if (content.about) {
+        const a = content.about;
+        const title = document.querySelector(".artisan-content h3");
+        if (title && a.heading) title.textContent = a.heading;
+        const quote = document.querySelector(".artisan-quote");
+        if (quote && a.quote) quote.textContent = `"${a.quote.replace(/"/g, '')}"`;
+        const img = document.querySelector(".artisan-portrait");
+        if (img && a.image) img.src = formatProductImageUrl(a.image);
+        const statNum = document.querySelector(".stat-number");
+        if (statNum && a.statNumber) statNum.textContent = a.statNumber;
+        const statLabel = document.querySelector(".stat-label");
+        if (statLabel && a.statLabel) statLabel.textContent = a.statLabel;
+      }
+
+      if (Array.isArray(content.care_guide) && content.care_guide.length > 0) {
+        const careGrid = document.querySelector(".care-grid");
+        if (careGrid) {
+          careGrid.innerHTML = content.care_guide.map(c => `
+            <div class="care-card">
+              <div class="care-icon">${c.icon || '✨'}</div>
+              <h4>${c.title}</h4>
+              <p>${c.text}</p>
+            </div>
+          `).join('');
+        }
+      }
+    } catch (e) {}
+  }
 
   // Search Input
   if (catalogSearch) {
@@ -248,7 +372,7 @@ document.addEventListener("DOMContentLoaded", () => {
     quickViewQuantity = 1;
     quickViewSelectedOptions = {};
 
-    modalImg.src = product.image;
+    modalImg.src = formatProductImageUrl(product.image);
     modalImg.alt = product.title;
     modalCategory.textContent = product.categoryName;
     modalTitle.textContent = product.title;
@@ -465,7 +589,7 @@ document.addEventListener("DOMContentLoaded", () => {
           return `
             <div class="cart-item" data-id="${item.id}">
               <div class="cart-item-thumb">
-                <img src="${item.image}" alt="${item.title}" />
+                <img src="${formatProductImageUrl(item.image)}" alt="${item.title}" onerror="this.src='assets/images/pipe-cleaner-tulips.jpg'" />
               </div>
               <div class="cart-item-details">
                 <h4>${item.title}</h4>
@@ -604,6 +728,24 @@ document.addEventListener("DOMContentLoaded", () => {
         budget,
         description
       });
+
+      // Record custom commission request in Admin database
+      try {
+        const host = window.FLEURIA_API_HOST || '';
+        fetch(`${host}/api/public/custom-orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            phone,
+            type,
+            palette,
+            date,
+            budget,
+            description
+          })
+        }).catch(() => {});
+      } catch (err) {}
 
       showToast("Opening WhatsApp with your bespoke request...");
       window.open(bespokeUrl, "_blank");
@@ -751,6 +893,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 3800);
   }
 
-  // Initialize
+  // Initialize dynamic components & sync
   applyStoreBranding();
+  renderCategories();
+  renderReviews();
+  renderCMSContent();
+
+  // Re-render when database sends catalog updates
+  window.addEventListener("fleuriaCatalogUpdated", () => {
+    renderCategories();
+    renderProducts();
+  });
 });
+

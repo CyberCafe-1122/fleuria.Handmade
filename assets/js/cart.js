@@ -183,6 +183,22 @@ class CartManager {
     msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
     msg += `💬 *Next Steps:* Please confirm order availability and send payment details. Thank you!`;
 
+    // Automatically record order in Admin Panel persistent database in background
+    try {
+      const host = window.FLEURIA_API_HOST || '';
+      fetch(`${host}/api/public/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer,
+          items: this.items,
+          subtotal,
+          shippingFee: shipping,
+          total: grandTotal
+        })
+      }).catch(() => {});
+    } catch (e) {}
+
     return buildWhatsAppUrl(StoreConfig.whatsappNumber, msg);
   }
 

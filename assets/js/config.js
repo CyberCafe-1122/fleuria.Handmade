@@ -1,6 +1,6 @@
 /**
  * Fleuria Handmade - Store & Business Configuration
- * Store owners can customize the WhatsApp number, currency, and business details here.
+ * Store owners can customize the WhatsApp number, currency, and business details via the Admin Panel.
  */
 const DEFAULT_CONFIG = {
   storeName: "Fleuria Handmade",
@@ -20,6 +20,34 @@ const DEFAULT_CONFIG = {
   welcomeOfferCode: "FLEURIA10"
 };
 
+// Determine backend API host
+// Supports:
+// 1. window.FLEURIA_API_HOST (explicit programmatic override)
+// 2. URL parameter ?api=https://your-api-url (auto-saved to localStorage)
+// 3. localStorage 'fleuria_api_host'
+// 4. Localhost fallback ('http://localhost:5000')
+(function() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const apiParam = params.get('api');
+    if (apiParam) {
+      localStorage.setItem('fleuria_api_host', apiParam.replace(/\/$/, ''));
+    }
+  } catch (e) {}
+})();
+
+const STORED_API_HOST = (function() {
+  try { return localStorage.getItem('fleuria_api_host'); } catch (e) { return null; }
+})();
+
+const API_HOST = window.FLEURIA_API_HOST ||
+  STORED_API_HOST ||
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5000'
+    : '');
+
+window.FLEURIA_API_HOST = API_HOST;
+
 // Load persistent config or fallback to defaults
 const StoreConfig = {
   ...DEFAULT_CONFIG,
@@ -28,27 +56,6 @@ const StoreConfig = {
       const saved = localStorage.getItem("fleuria_store_config");
       if (!saved) return {};
       const parsed = JSON.parse(saved);
-      let migrated = false;
-      if (parsed.whatsappNumber === "15551234567") {
-        parsed.whatsappNumber = "213555812564";
-        parsed.whatsappDisplay = "+213 555 81 25 64";
-        migrated = true;
-      }
-      // Migrate old USD default config to Algerian Dinar (DA / DZD)
-      if (parsed.currency === "$" || parsed.currencyCode === "USD") {
-        parsed.currency = "DA";
-        parsed.currencyCode = "DZD";
-        if (parsed.freeShippingThreshold === 60) parsed.freeShippingThreshold = 8000;
-        if (parsed.standardShippingFee === 5) parsed.standardShippingFee = 600;
-        migrated = true;
-      }
-      if (parsed.tagline && parsed.tagline.includes("Crochet")) {
-        parsed.tagline = DEFAULT_CONFIG.tagline;
-        migrated = true;
-      }
-      if (migrated) {
-        localStorage.setItem("fleuria_store_config", JSON.stringify(parsed));
-      }
       return parsed;
     } catch (e) {
       return {};
@@ -56,7 +63,7 @@ const StoreConfig = {
   })()
 };
 
-// Save updated config
+// Save updated config locally & dispatch event
 function updateStoreConfig(newValues) {
   Object.assign(StoreConfig, newValues);
   try {
@@ -68,12 +75,38 @@ function updateStoreConfig(newValues) {
   window.dispatchEvent(new CustomEvent("storeConfigChanged", { detail: StoreConfig }));
 }
 
-// Reset store config to default
-function resetStoreConfig() {
-  localStorage.removeItem("fleuria_store_config");
-  Object.assign(StoreConfig, DEFAULT_CONFIG);
-  window.dispatchEvent(new CustomEvent("storeConfigChanged", { detail: StoreConfig }));
+// Fetch live store settings from Admin Backend database
+async function syncStoreConfigFromAPI() {
+  try {
+    const res = await fetch(`${API_HOST}/api/public/config`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data && data.storeName) {
+      updateStoreConfig({
+        storeName: data.storeName,
+        tagline: data.tagline,
+        whatsappNumber: data.whatsappNumber,
+        whatsappDisplay: data.whatsappDisplay,
+        currency: data.currency,
+        currencyCode: data.currencyCode,
+        freeShippingThreshold: Number(data.freeShippingThreshold) || 8000,
+        standardShippingFee: Number(data.standardShippingFee) || 600,
+        instagram: data.instagram,
+        email: data.email,
+        location: data.location,
+        workingHours: data.workingHours,
+        responseTime: data.responseTime,
+        welcomeOfferCode: data.welcomeOfferCode
+      });
+    }
+  } catch (err) {
+    // Backend offline or loading, local StoreConfig fallback active
+  }
 }
+
+// Auto-sync on startup and when user focuses back on window
+syncStoreConfigFromAPI();
+window.addEventListener('focus', syncStoreConfigFromAPI);
 
 // Helper to format currency
 function formatCurrency(amount) {
@@ -113,6 +146,14 @@ function buildWhatsAppUrl(phone, textMessage) {
 // Expose globally
 window.StoreConfig = StoreConfig;
 window.updateStoreConfig = updateStoreConfig;
-window.resetStoreConfig = resetStoreConfig;
+window.syncStoreConfigFromAPI = syncStoreConfigFromAPI;
 window.formatCurrency = formatCurrency;
 window.buildWhatsAppUrl = buildWhatsAppUrl;
+window.setFleuriaApiHost = function(url) {
+  if (url) {
+    localStorage.setItem('fleuria_api_host', url.replace(/\/$/, ''));
+  } else {
+    localStorage.removeItem('fleuria_api_host');
+  }
+  window.location.reload();
+};
